@@ -16,7 +16,8 @@ function Login() {
     event.preventDefault();
     setError('');
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/login', { email, senha });
+      // CORREÇÃO AQUI
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, { email, senha });
       const { token, usuario } = response.data;
       login(usuario, token);
       navigate('/');
@@ -29,7 +30,7 @@ function Login() {
     <div className="bg-gray-100 flex justify-center items-center h-screen">
       <div className="w-full max-w-sm">
         <div className="text-center mb-6">
-          <h1 className="text-4xl font-bold text-gray-800">PDV Digital</h1>         
+          <h1 className="text-4xl font-bold text-gray-800">PDV Digital</h1>
         </div>
         <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
           <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Login</h2>

@@ -17,7 +17,8 @@ function Register() {
     setError('');
     setMessage('');
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/register', { nome, email, senha });
+      // CORREÇÃO AQUI
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, { nome, email, senha });
       setMessage(response.data.message + " Redirecionando para o login...");
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {

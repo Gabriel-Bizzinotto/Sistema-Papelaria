@@ -32,7 +32,8 @@ function Estoque() {
     const fetchProdutos = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:3001/api/produtos`, {
+        // CORREÇÃO AQUI
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/produtos`, {
           params: {
             pagina: paginaAtual,
             busca: termoBusca,
@@ -69,7 +70,8 @@ function Estoque() {
     event.preventDefault();
     const novoProduto = { nome, preco_venda: parseFloat(preco), quantidade_estoque: parseInt(quantidade), codigo_barras: codigoBarras };
     try {
-      await axios.post('http://localhost:3001/api/produtos', novoProduto);
+      // CORREÇÃO AQUI
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/produtos`, novoProduto);
       toast.success('Produto adicionado com sucesso!');
       setNome(''); setPreco(''); setQuantidade(''); setCodigoBarras('');
       setPaginaAtual(1); setTermoBusca(''); // Volta para a página 1 da lista completa
@@ -79,7 +81,8 @@ function Estoque() {
   const handleDelete = async (id) => {
     if (!window.confirm('Tem certeza de que deseja deletar este produto?')) return;
     try {
-      await axios.delete(`http://localhost:3001/api/produtos/${id}`);
+      // CORREÇÃO AQUI
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/produtos/${id}`);
       toast.success('Produto deletado com sucesso!');
       // Recarrega a página atual para refletir a remoção
       setProdutos(produtos.filter(p => p.id !== id));
@@ -90,7 +93,8 @@ function Estoque() {
     event.preventDefault();
     if (!editingProduct) return;
     try {
-      const response = await axios.put(`http://localhost:3001/api/produtos/${editingProduct.id}`, editingProduct);
+      // CORREÇÃO AQUI
+      const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/produtos/${editingProduct.id}`, editingProduct);
       toast.success('Produto atualizado com sucesso!');
       setProdutos(produtos.map(p => (p.id === editingProduct.id ? response.data : p)));
       handleCloseModal();
@@ -111,24 +115,24 @@ function Estoque() {
       <section className="mb-10 p-6 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold mb-4 text-gray-700">Adicionar Novo Produto</h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            <div className="lg:col-span-2"><label htmlFor="nome" className="block text-sm font-medium text-gray-600">Nome do Produto</label><input type="text" id="nome" value={nome} onChange={(e) => setNome(e.target.value)} className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"/></div>
-            <div><label htmlFor="preco" className="block text-sm font-medium text-gray-600">Preço (R$)</label><input type="number" id="preco" step="0.01" value={preco} onChange={(e) => setPreco(e.target.value)} className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"/></div>
-            <div><label htmlFor="quantidade" className="block text-sm font-medium text-gray-600">Quantidade</label><input type="number" id="quantidade" value={quantidade} onChange={(e) => setQuantidade(e.target.value)} className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"/></div>
-            <div className="lg:col-span-2"><label htmlFor="codigoBarras" className="block text-sm font-medium text-gray-600">Código de Barras</label><input type="text" id="codigoBarras" value={codigoBarras} onChange={(e) => setCodigoBarras(e.target.value)} className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"/></div>
-            <div className="md:col-span-2 lg:col-span-5 flex justify-end items-center"><button type="submit" className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">Salvar Produto</button></div>
+          <div className="lg:col-span-2"><label htmlFor="nome" className="block text-sm font-medium text-gray-600">Nome do Produto</label><input type="text" id="nome" value={nome} onChange={(e) => setNome(e.target.value)} className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"/></div>
+          <div><label htmlFor="preco" className="block text-sm font-medium text-gray-600">Preço (R$)</label><input type="number" id="preco" step="0.01" value={preco} onChange={(e) => setPreco(e.target.value)} className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"/></div>
+          <div><label htmlFor="quantidade" className="block text-sm font-medium text-gray-600">Quantidade</label><input type="number" id="quantidade" value={quantidade} onChange={(e) => setQuantidade(e.target.value)} className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"/></div>
+          <div className="lg:col-span-2"><label htmlFor="codigoBarras" className="block text-sm font-medium text-gray-600">Código de Barras</label><input type="text" id="codigoBarras" value={codigoBarras} onChange={(e) => setCodigoBarras(e.target.value)} className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"/></div>
+          <div className="md:col-span-2 lg:col-span-5 flex justify-end items-center"><button type="submit" className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">Salvar Produto</button></div>
         </form>
       </section>
 
       {/* Seção da Lista de Produtos com Pesquisa */}
       <section className="p-6 bg-white rounded-lg shadow-md">
         <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold text-gray-700">Lista de Produtos</h2>
-            <input 
-                type="text"
-                placeholder="Pesquisar por nome..."
-                onChange={(e) => { setTermoBusca(e.target.value); setPaginaAtual(1); }}
-                className="w-full max-w-xs p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            />
+          <h2 className="text-2xl font-semibold text-gray-700">Lista de Produtos</h2>
+          <input 
+            type="text"
+            placeholder="Pesquisar por nome..."
+            onChange={(e) => { setTermoBusca(e.target.value); setPaginaAtual(1); }}
+            className="w-full max-w-xs p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
         </div>
 
         {/* Tabela de Produtos */}
@@ -169,25 +173,25 @@ function Estoque() {
         {/* Componente de Paginação */}
         {!loading && totalPaginas > 0 && (
           <div className="flex justify-between items-center mt-4 pt-4 border-t">
-              <span className="text-sm text-gray-600">
-                  Página {paginaAtual} de {totalPaginas}
-              </span>
-              <div className="flex items-center space-x-2">
-                  <button 
-                      onClick={() => setPaginaAtual(p => Math.max(p - 1, 1))} 
-                      disabled={paginaAtual === 1}
-                      className="px-4 py-2 border rounded-md text-sm font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                      Anterior
-                  </button>
-                  <button 
-                      onClick={() => setPaginaAtual(p => Math.min(p + 1, totalPaginas))} 
-                      disabled={paginaAtual === totalPaginas}
-                      className="px-4 py-2 border rounded-md text-sm font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                      Próxima
-                  </button>
-              </div>
+            <span className="text-sm text-gray-600">
+              Página {paginaAtual} de {totalPaginas}
+            </span>
+            <div className="flex items-center space-x-2">
+              <button 
+                onClick={() => setPaginaAtual(p => Math.max(p - 1, 1))} 
+                disabled={paginaAtual === 1}
+                className="px-4 py-2 border rounded-md text-sm font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Anterior
+              </button>
+              <button 
+                onClick={() => setPaginaAtual(p => Math.min(p + 1, totalPaginas))} 
+                disabled={paginaAtual === totalPaginas}
+                className="px-4 py-2 border rounded-md text-sm font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Próxima
+              </button>
+            </div>
           </div>
         )}
       </section>

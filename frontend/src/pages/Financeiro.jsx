@@ -16,8 +16,10 @@ function Financeiro() {
     const fetchData = async () => {
       try {
         const [resVendas, resRelatorio] = await Promise.all([
-          axios.get('http://localhost:3001/api/vendas'),
-          axios.get('http://localhost:3001/api/relatorios/vendas-por-dia')
+          // CORREÇÃO AQUI
+          axios.get(`${import.meta.env.VITE_API_URL}/api/vendas`),
+          // CORREÇÃO AQUI
+          axios.get(`${import.meta.env.VITE_API_URL}/api/relatorios/vendas-por-dia`)
         ]);
         setVendas(resVendas.data);
         setRelatorioPorDia(resRelatorio.data);
@@ -36,7 +38,8 @@ function Financeiro() {
     setLoadingDetails(true);
     setSelectedVenda({ ...venda, itens: [] });
     try {
-      const response = await axios.get(`http://localhost:3001/api/vendas/${venda.id}`);
+      // CORREÇÃO AQUI
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/vendas/${venda.id}`);
       setSelectedVenda({ ...venda, itens: response.data });
     } catch (err) {
       console.error('Erro ao buscar detalhes da venda:', err);

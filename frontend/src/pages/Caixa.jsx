@@ -14,8 +14,10 @@ function Caixa() {
   useEffect(() => {
     const fetchProdutos = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/produtos');
-        setTodosProdutos(response.data);
+        // CORREÇÃO AQUI
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/produtos`);
+        // O `response.data` da rota de produtos paginada é um objeto
+        setTodosProdutos(response.data.produtos || []); 
       } catch (error) {
         console.error("Erro ao buscar produtos:", error);
         toast.error("Não foi possível carregar os produtos do estoque.");
@@ -84,7 +86,8 @@ function Caixa() {
       }))
     };
     try {
-      await axios.post('http://localhost:3001/api/vendas', dadosVenda);
+      // CORREÇÃO AQUI
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/vendas`, dadosVenda);
       toast.success('Venda registrada com sucesso!');
       setCarrinho([]);
       setTermoBusca('');
