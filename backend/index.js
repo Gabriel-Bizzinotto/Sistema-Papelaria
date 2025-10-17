@@ -10,12 +10,16 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const PORT = 3001;
 
+// Configuração da Conexão com o Banco de Dados com SSL
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
+  ssl: { // ADIÇÃO PARA CONEXÃO SEGURA COM O NEON
+    rejectUnauthorized: false
+  }
 });
 
 app.use(cors());
